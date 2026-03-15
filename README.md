@@ -4,8 +4,6 @@
 
 ### Cryptographic Sound Guitar Entropy Harvester
 
-**A Jupiter Labs Project**
-
 ### CURRENTLY A PROTOTYPE/WORK IN PROGRESS - DO NOT USE FOR REAL NETWORK SECURITY :)
 
 </div>
