@@ -1,67 +1,87 @@
-GuitaRNG
+<div align="center">
 
-Cryptographic Sound Guitar Entropy Harvester (MicroPython Edition)
-A Jupiter Labs Project
+<img src="guitaRNGlogo.png" width="220"/>
 
-GuitaRNG is a True Random Number Generator (TRNG) built for the ESP32-S3. It harvests high-quality entropy from the physical world, specifically from the acoustic resonance and percussive hits of a guitar via a piezo sensor, and combines it with environmental and silicon-level noise.
+# GuitaRNG
 
-The raw entropy is conditioned using a BLAKE3-inspired ARX construction and continuously monitored using a suite of NIST SP 800-90B health tests to ensure cryptographic viability.
-Features
+### Cryptographic Sound Guitar Entropy Harvester  
+**A Jupiter Labs Project**
 
-    Multi-Source Harvesting: Collects entropy from Piezo ADC (guitar strums), ESP32 Hardware RNG, CPU Timing Jitter, WiFi RSSI variations, and BLE advertisement timing.
+</div>
 
-    Robust Conditioning: Utilizes an avalanche mixing pool (256-byte) paired with a BLAKE3-inspired cryptographic conditioner (7-round ARX construction) and Von Neumann debiasing.
+---
 
-    Real-Time Health Monitoring: Implements continuous NIST SP 800-90B health checks, including Repetition Count Test (RCT), Adaptive Proportion Test (APT), Chi-Square, and Runs tests.
+GuitaRNG is a **True Random Number Generator (TRNG)** built for the **ESP32-S3**.  
+It harvests high-quality entropy from the physical world — specifically from the acoustic resonance and percussive hits of a guitar via a **piezo sensor** — and combines it with environmental and silicon-level noise.
 
-    Network & Discord Integration: Sends base64-encoded entropy bursts to a designated receiver via UDP and broadcasts live "STRUM" events to external listeners (like a Discord bot).
+The raw entropy is conditioned using a **BLAKE3-inspired ARX construction** and continuously monitored using **NIST SP 800-90B health tests** to ensure cryptographic viability.
 
-    Live Tuning: Features a UDP control plane (port 5010) to adjust ADC noise floors, hit thresholds, and debounce settings on the fly without rebooting.
+---
 
-    Interactive RGB: Includes WS2812B NeoPixel support for visual feedback. It cycles a full color spectrum on a recognized strum and returns to a pulsating white idle state.
+## Features
 
-Hardware Requirements
+- **Multi-Source Harvesting:** Collects entropy from Piezo ADC (guitar strums), ESP32 Hardware RNG, CPU Timing Jitter, WiFi RSSI variations, and BLE advertisement timing.
 
-    Microcontroller: ESP32-S3 (Tested on DevKitC WROOM1 N16R8).
+- **Robust Conditioning:** Utilizes an avalanche mixing pool (256-byte) paired with a BLAKE3-inspired cryptographic conditioner (7-round ARX construction) and Von Neumann debiasing.
 
-    Sensor: Analog piezo electric sensor wired to an ADC-capable pin (Default: GPIO 4).
+- **Real-Time Health Monitoring:** Implements continuous NIST SP 800-90B health checks, including Repetition Count Test (RCT), Adaptive Proportion Test (APT), Chi-Square, and Runs tests.
 
-    Visuals (Optional): ESP32-S3 addressable LED compatible.
+- **Network & Discord Integration:** Sends base64-encoded entropy bursts to a designated receiver via UDP and broadcasts live "STRUM" events to external listeners (like a Discord bot, if you have one set up).
 
-Project Structure
+- **Live Tuning:** Features a UDP control plane (port 5010) to adjust ADC noise floors, hit thresholds, and debounce settings on the fly without rebooting.
 
-    boot.py: Minimal bootstrapper; enables garbage collection and preps the board.
+- **Interactive RGB:** Includes WS2812B NeoPixel support for visual feedback. It cycles a full color spectrum on a recognized strum and returns to a pulsating white idle state.
 
-    config.py: The master configuration file. All tunable parameters (thresholds, networking, pins, toggles) live here.
+---
 
-    control.py: The runtime control plane for live UDP parameter adjustments.
+## Hardware Requirements
 
-    entropy.py: The core cryptographic engine containing the BLAKE3 conditioner, pool mixing, debiasing, and NIST health monitors.
+- **Microcontroller:** ESP32-S3 (Tested on DevKitC WROOM1 N16R8).
 
-    main.py: The main execution loop handling sensor polling, networking, LED management, and dashboard reporting.
+- **Sensor:** Analog piezo electric sensor wired to an ADC-capable pin (Default: GPIO 4).
 
-Installation & Setup
+- **Visuals (Optional):** ESP32-S3 addressable LED compatible.
 
-    Flash your ESP32-S3 with the latest MicroPython firmware.
+---
 
-    Clone this repository and update config.py with your specific parameters:
+## Project Structure
 
-        Add your WIFI_SSID and WIFI_PASSWORD.
+- **boot.py:** Minimal bootstrapper; enables garbage collection and preps the board.
 
-        Update TARGET_IP (for the strum listener) and ENTROPY_RECEIVER_IP to your network architecture.
+- **config.py:** The master configuration file. All tunable parameters (thresholds, networking, pins, toggles) live here.
 
-        Adjust PIEZO_ADC_PIN and RGB_PIN if your wiring differs from the defaults.
+- **control.py:** The runtime control plane for live UDP parameter adjustments.
 
-    Upload all .py files to the root of your ESP32-S3 using your preferred tool (e.g., mpremote, ampy, or Thonny).
+- **entropy.py:** The core cryptographic engine containing the BLAKE3 conditioner, pool mixing, debiasing, and NIST health monitors.
 
-    Reboot the board. You can connect via USB serial to view the real-time entropy grading dashboard and ADC debugging stats.
+- **main.py:** The main execution loop handling sensor polling, networking, LED management, and dashboard reporting.
 
-Tuning Guide
+---
+
+## Installation & Setup
+
+- Flash your ESP32-S3 with the latest MicroPython firmware.
+
+- Clone this repository and update config.py with your specific parameters:
+
+  - Add your WIFI_SSID and WIFI_PASSWORD.
+
+  - Update TARGET_IP (for the strum listener) and ENTROPY_RECEIVER_IP to your network architecture.
+
+  - Adjust PIEZO_ADC_PIN and RGB_PIN if your wiring differs from the defaults.
+
+- Upload all .py files to the root of your ESP32-S3 using your preferred tool (e.g., mpremote, ampy, or Thonny).
+
+- Reboot the board. You can connect via USB serial to view the real-time entropy grading dashboard and ADC debugging stats.
+
+---
+
+## Tuning Guide
 
 Every guitar and piezo setup is different. Use the serial monitor output to fine-tune your configuration in config.py or live via UDP:
 
-    Too many false hits? Raise PIEZO_HIT_THRESHOLD or ADC_NOISE_FLOOR.
+- Too many false hits? Raise PIEZO_HIT_THRESHOLD or ADC_NOISE_FLOOR.
 
-    Low entropy scores? Increase SAMPLE_BATCH_SIZE or lower POLL_DELAY_MS.
+- Low entropy scores? Increase SAMPLE_BATCH_SIZE or lower POLL_DELAY_MS.
 
-    Health test failures? Ensure the environment isn't completely static and verify the hardware RNG/Jitter sources are enabled.
+- Health test failures? Ensure the environment isn't completely static and verify the hardware RNG/Jitter sources are enabled.
