@@ -2,7 +2,8 @@
 
 <img src="guitaRNGlogo.png" width="220"/>
 
-### Cryptographic Sound Guitar Entropy Harvester - CURRENTLY A PROTOTYPE - AS ALWAYS, DO NOT USE FOR SECURING CRITICAL NETWORKS
+### Cryptographic Sound Guitar Entropy Harvester
+### CURRENTLY A PROTOTYPE - AS ALWAYS, DO NOT USE FOR SECURING CRITICAL NETWORKS
 **A Jupiter Labs Project**
 
 </div>
